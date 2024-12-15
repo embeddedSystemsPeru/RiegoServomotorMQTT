@@ -1,0 +1,1305 @@
+[
+    {
+        "id": "1dc66cc7.87f363",
+        "type": "tab",
+        "label": "UNI G01 Trabajo Final",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "58649e4d.2e781",
+        "type": "mqtt in",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "topic": "+/+/+",
+        "qos": "1",
+        "datatype": "auto",
+        "broker": "234a27a3d26c0e76",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 90,
+        "y": 540,
+        "wires": [
+            [
+                "405f43af.ea31fc",
+                "790342546439bae3"
+            ]
+        ]
+    },
+    {
+        "id": "405f43af.ea31fc",
+        "type": "debug",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 180,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "790342546439bae3",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionMain",
+        "func": "const topic = msg.topic;\nconst payload = parseFloat(msg.payload); \n\nconst parts = topic.split(\"/\");\nconst deviceName = parts[1];  \nconst metric = parts[2];      \n\n//const timestamp = new Date().toLocaleTimeString(); \nconst timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });\n\nmsg.topic = metric;\n\nmsg.payload = {\n    series: deviceName,    \n    value: payload,       \n    label: timestamp       \n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 230,
+        "y": 640,
+        "wires": [
+            [
+                "448a54ed6c185956",
+                "dacf739916fef749"
+            ]
+        ]
+    },
+    {
+        "id": "122666526536218a",
+        "type": "ui_chart",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "14555446f2c1ab56",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "Temperature (°C)",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "50",
+        "removeOlder": "24",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#fe7f0e",
+            "#2ca02c",
+            "#d62728",
+            "#fbff05",
+            "#28abd7",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 850,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "448a54ed6c185956",
+        "type": "switch",
+        "z": "1dc66cc7.87f363",
+        "name": "switch",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "temp",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "humidity",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "light",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "water_flow",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 330,
+        "y": 780,
+        "wires": [
+            [
+                "dccae7a666f3beb5",
+                "4fa8c88663fda417",
+                "a6cfaf85f22f43e1",
+                "17d640a304223d2c",
+                "9c6138044ad84747",
+                "62447669e648dbf5"
+            ],
+            [
+                "59746cf747cbdfc0",
+                "8732750bd5b76ee4",
+                "6ca10f7b886e0957",
+                "c1bfaae59dd6aa96",
+                "5b31ba5b7cb06ad4"
+            ],
+            [
+                "142894f99a06ca58",
+                "06c165acdb83a409",
+                "ee2e0c81ab46619d",
+                "eea6974fdd246f47",
+                "8a77818293aeb0b0"
+            ],
+            [
+                "09235b39e024530d",
+                "74075309865fc281",
+                "7a87c25cf39fe8fd",
+                "7e1119d8ac846195",
+                "fcb8441c83042d8e"
+            ]
+        ]
+    },
+    {
+        "id": "dacf739916fef749",
+        "type": "debug",
+        "z": "1dc66cc7.87f363",
+        "name": "debugFunction",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 300,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "dccae7a666f3beb5",
+        "type": "debug",
+        "z": "1dc66cc7.87f363",
+        "name": "debugTemp1",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 540,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "4fa8c88663fda417",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevices",
+        "func": "msg.topic = msg.payload.series;  \nmsg.payload = msg.payload.value; \nmsg.label = msg.payload.label;   \nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 380,
+        "wires": [
+            [
+                "122666526536218a",
+                "0b227c43117d07ee"
+            ]
+        ]
+    },
+    {
+        "id": "0b227c43117d07ee",
+        "type": "debug",
+        "z": "1dc66cc7.87f363",
+        "name": "debugTemp2",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 800,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "59746cf747cbdfc0",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevices",
+        "func": "msg.topic = msg.payload.series;  \nmsg.payload = msg.payload.value; \nmsg.label = msg.payload.label;   \nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 600,
+        "wires": [
+            [
+                "28630779355bdd93"
+            ]
+        ]
+    },
+    {
+        "id": "142894f99a06ca58",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevices",
+        "func": "msg.topic = msg.payload.series;  \nmsg.payload = msg.payload.value; \nmsg.label = msg.payload.label;   \nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 820,
+        "wires": [
+            [
+                "0ae5adb56c824e31"
+            ]
+        ]
+    },
+    {
+        "id": "6fe1f0fbcae5ec54",
+        "type": "ui_gauge",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "6a2fcf89246e4615",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temperature (°C)",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "50",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 850,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "a6cfaf85f22f43e1",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevice01",
+        "func": "if (msg.payload.series === \"toparpa\") {\n    msg.payload = msg.payload.value; \n    return msg;\n}\nreturn null; ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 420,
+        "wires": [
+            [
+                "6fe1f0fbcae5ec54"
+            ]
+        ]
+    },
+    {
+        "id": "17d640a304223d2c",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevice02",
+        "func": "if (msg.payload.series === \"golf\") {\n    msg.payload = msg.payload.value; \n    return msg;\n}\nreturn null; ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 460,
+        "wires": [
+            [
+                "4f5903e736c21086"
+            ]
+        ]
+    },
+    {
+        "id": "4f5903e736c21086",
+        "type": "ui_gauge",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "7cb217623c50902b",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temperature (°C)",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "50",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 850,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "8732750bd5b76ee4",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevice01",
+        "func": "if (msg.payload.series === \"toparpa\") {\n    msg.payload = msg.payload.value; \n    return msg;\n}\nreturn null; ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 640,
+        "wires": [
+            [
+                "b142a02ca36e9904"
+            ]
+        ]
+    },
+    {
+        "id": "6ca10f7b886e0957",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevice02",
+        "func": "if (msg.payload.series === \"golf\") {\n    msg.payload = msg.payload.value; \n    return msg;\n}\nreturn null; ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 680,
+        "wires": [
+            [
+                "00bf11ba12c07005"
+            ]
+        ]
+    },
+    {
+        "id": "ee2e0c81ab46619d",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevice02",
+        "func": "if (msg.payload.series === \"golf\") {\n    msg.payload = msg.payload.value; \n    return msg;\n}\nreturn null; ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 900,
+        "wires": [
+            [
+                "ea71d3c8967d99b6"
+            ]
+        ]
+    },
+    {
+        "id": "06c165acdb83a409",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevice01",
+        "func": "if (msg.payload.series === \"toparpa\") {\n    msg.payload = msg.payload.value; \n    return msg;\n}\nreturn null; ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 860,
+        "wires": [
+            [
+                "ddd3a641b7cc54e5"
+            ]
+        ]
+    },
+    {
+        "id": "b142a02ca36e9904",
+        "type": "ui_gauge",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "6a2fcf89246e4615",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Humidity (%)",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "120",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 850,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "00bf11ba12c07005",
+        "type": "ui_gauge",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "7cb217623c50902b",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Humidity (%)",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "120",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 850,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "ddd3a641b7cc54e5",
+        "type": "ui_gauge",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "6a2fcf89246e4615",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Light (off / on)",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1",
+        "colors": [
+            "#e1dbdb",
+            "#ffffff",
+            "#f5ed00"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 860,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "28630779355bdd93",
+        "type": "ui_chart",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "14555446f2c1ab56",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "Humidity (%)",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "120",
+        "removeOlder": "24",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#fe7f0e",
+            "#2ca02c",
+            "#d62728",
+            "#fbff05",
+            "#28abd7",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 850,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0ae5adb56c824e31",
+        "type": "ui_chart",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "14555446f2c1ab56",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "Light (off / on)",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "2",
+        "removeOlder": "24",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#fe7f0e",
+            "#2ca02c",
+            "#d62728",
+            "#fbff05",
+            "#28abd7",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 860,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9c6138044ad84747",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevice03",
+        "func": "if (msg.payload.series === \"wr\") {\n    msg.payload = msg.payload.value; \n    return msg;\n}\nreturn null; ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 500,
+        "wires": [
+            [
+                "0eca096e774e6c88"
+            ]
+        ]
+    },
+    {
+        "id": "0eca096e774e6c88",
+        "type": "ui_gauge",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "4772175d9ee340ce",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temperature (°C)",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "50",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 850,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "c1bfaae59dd6aa96",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevice03",
+        "func": "if (msg.payload.series === \"wr\") {\n    msg.payload = msg.payload.value; \n    return msg;\n}\nreturn null; ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 720,
+        "wires": [
+            [
+                "8af14acea6022403"
+            ]
+        ]
+    },
+    {
+        "id": "eea6974fdd246f47",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevice03",
+        "func": "if (msg.payload.series === \"wr\") {\n    msg.payload = msg.payload.value; \n    return msg;\n}\nreturn null; ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 940,
+        "wires": [
+            [
+                "e4904f3df37554f2"
+            ]
+        ]
+    },
+    {
+        "id": "8af14acea6022403",
+        "type": "ui_gauge",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "4772175d9ee340ce",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Humidity (%)",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "120",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 850,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "ea71d3c8967d99b6",
+        "type": "ui_gauge",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "7cb217623c50902b",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Light (off / on)",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1",
+        "colors": [
+            "#e1dbdb",
+            "#ffffff",
+            "#f5ed00"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 860,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "e4904f3df37554f2",
+        "type": "ui_gauge",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "4772175d9ee340ce",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Light (off / on)",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1",
+        "colors": [
+            "#e1dbdb",
+            "#ffffff",
+            "#f5ed00"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 860,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "09235b39e024530d",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevices",
+        "func": "msg.topic = msg.payload.series;  \nmsg.payload = msg.payload.value; \nmsg.label = msg.payload.label;   \nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 1040,
+        "wires": [
+            [
+                "2b9fc6d0d8a5c4ec"
+            ]
+        ]
+    },
+    {
+        "id": "2b9fc6d0d8a5c4ec",
+        "type": "ui_chart",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "14555446f2c1ab56",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "Water flow (off / partial / on)",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "3",
+        "removeOlder": "24",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#fe7f0e",
+            "#2ca02c",
+            "#d62728",
+            "#fbff05",
+            "#28abd7",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 900,
+        "y": 1040,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "74075309865fc281",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevice01",
+        "func": "if (msg.payload.series === \"toparpa\") {\n    msg.payload = msg.payload.value; \n    return msg;\n}\nreturn null; ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 1080,
+        "wires": [
+            [
+                "aa364c70c597aef1"
+            ]
+        ]
+    },
+    {
+        "id": "7a87c25cf39fe8fd",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevice02",
+        "func": "if (msg.payload.series === \"golf\") {\n    msg.payload = msg.payload.value; \n    return msg;\n}\nreturn null; ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 1120,
+        "wires": [
+            [
+                "99187da4fe26f8f1"
+            ]
+        ]
+    },
+    {
+        "id": "7e1119d8ac846195",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevice03",
+        "func": "if (msg.payload.series === \"wr\") {\n    msg.payload = msg.payload.value; \n    return msg;\n}\nreturn null; ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 1160,
+        "wires": [
+            [
+                "fa05ab796282671a"
+            ]
+        ]
+    },
+    {
+        "id": "aa364c70c597aef1",
+        "type": "ui_gauge",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "6a2fcf89246e4615",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Water flow (off / partial / on)",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "2",
+        "colors": [
+            "#bcb8b8",
+            "#fcf403",
+            "#02ca63"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 900,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "99187da4fe26f8f1",
+        "type": "ui_gauge",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "7cb217623c50902b",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Water flow (off / partial / on)",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "2",
+        "colors": [
+            "#bcb8b8",
+            "#fcf403",
+            "#02ca63"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 900,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "fa05ab796282671a",
+        "type": "ui_gauge",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "4772175d9ee340ce",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Water flow (off / partial / on)",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "2",
+        "colors": [
+            "#bcb8b8",
+            "#fcf403",
+            "#02ca63"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 900,
+        "y": 1160,
+        "wires": []
+    },
+    {
+        "id": "fcb8441c83042d8e",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevice04",
+        "func": "if (msg.payload.series === \"fio\") {\n    msg.payload = msg.payload.value; \n    return msg;\n}\nreturn null; ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 1200,
+        "wires": [
+            [
+                "12de0bbce6284f66"
+            ]
+        ]
+    },
+    {
+        "id": "12de0bbce6284f66",
+        "type": "ui_gauge",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "4682d0f70f18fcc8",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Water flow (off / partial / on)",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "2",
+        "colors": [
+            "#bcb8b8",
+            "#fcf403",
+            "#02ca63"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 900,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "8a77818293aeb0b0",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevice04",
+        "func": "if (msg.payload.series === \"fio\") {\n    msg.payload = msg.payload.value; \n    return msg;\n}\nreturn null; ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 980,
+        "wires": [
+            [
+                "ebd79a489043bdef"
+            ]
+        ]
+    },
+    {
+        "id": "ebd79a489043bdef",
+        "type": "ui_gauge",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "4682d0f70f18fcc8",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Light (off / on)",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1",
+        "colors": [
+            "#e1dbdb",
+            "#ffffff",
+            "#f5ed00"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 860,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "5b31ba5b7cb06ad4",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevice04",
+        "func": "if (msg.payload.series === \"fio\") {\n    msg.payload = msg.payload.value; \n    return msg;\n}\nreturn null; ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 760,
+        "wires": [
+            [
+                "0fd7e77444863ab3"
+            ]
+        ]
+    },
+    {
+        "id": "0fd7e77444863ab3",
+        "type": "ui_gauge",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "4682d0f70f18fcc8",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Humidity (%)",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "120",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 850,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "62447669e648dbf5",
+        "type": "function",
+        "z": "1dc66cc7.87f363",
+        "name": "functionDevice04",
+        "func": "if (msg.payload.series === \"fio\") {\n    msg.payload = msg.payload.value; \n    return msg;\n}\nreturn null; ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 540,
+        "wires": [
+            [
+                "f513d236b2231669"
+            ]
+        ]
+    },
+    {
+        "id": "f513d236b2231669",
+        "type": "ui_gauge",
+        "z": "1dc66cc7.87f363",
+        "name": "",
+        "group": "4682d0f70f18fcc8",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temperature (°C)",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "50",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 850,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "234a27a3d26c0e76",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "iot.iartificial.io",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "14555446f2c1ab56",
+        "type": "ui_group",
+        "name": "All Devices",
+        "tab": "c00d2f95.385e",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "6a2fcf89246e4615",
+        "type": "ui_group",
+        "name": "toparpa",
+        "tab": "c00d2f95.385e",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "7cb217623c50902b",
+        "type": "ui_group",
+        "name": "golf",
+        "tab": "c00d2f95.385e",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "4772175d9ee340ce",
+        "type": "ui_group",
+        "name": "wr",
+        "tab": "c00d2f95.385e",
+        "order": 4,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "4682d0f70f18fcc8",
+        "type": "ui_group",
+        "name": "fio",
+        "tab": "c00d2f95.385e",
+        "order": 5,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "c00d2f95.385e",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
